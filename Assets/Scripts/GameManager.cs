@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour
     public static GameManager sharedInstance;
 
     private PlayerController controller;
+    
+    public int collectedObject = 0;
 
     void Awake()
     {
@@ -50,16 +52,28 @@ public class GameManager : MonoBehaviour
     private void SetGameState(GameState newGameState){
         if(newGameState == GameState.menu){
             //TODO: colocar la lógica del menú
+            MenuManager.sharedInstance.ShowMainMenu();
+            
         }else if(newGameState == GameState.inGame){
             //TODO: hay que preparar la escena para jugar
             LevelManager.sharedInstance.RemoveAllLevelBlocks();
             LevelManager.sharedInstance.GenerateInitialBlocks();
             controller.StartGame();
+            MenuManager.sharedInstance.HideMainMenu();
+            MenuManager.sharedInstance.ShowGame();
+            
 
         }else if(newGameState == GameState.gameOver){
             //TODO: preparar el juego para el Game Over
+            MenuManager.sharedInstance.ShowGameOver();
+            MenuManager.sharedInstance.HideGame();
         }
 
         this.currentGameState = newGameState;
+    }
+    
+    public void CollectObject (Collectable collectable)
+    {
+        collectedObject += collectable.value; 
     }
 }
